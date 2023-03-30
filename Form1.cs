@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GBattleships.Game;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,28 +13,26 @@ namespace GBattleships
 {
     public partial class Form1 : Form
     {
+        private Battleships _battleships = new Battleships();
+
         public Form1()
         {
             InitializeComponent();
-            board.Add(new BoardFiled() { Row = 1, Column = 1, IsHit = true, IsShip = true});
-            board.Add(new BoardFiled() { Row = 2, Column = 2, IsHit = false, IsShip = true});
-            board.Add(new BoardFiled() { Row = 3, Column = 3, IsHit = true, IsShip = false });
-            board.Add(new BoardFiled() { Row = 4, Column = 4, IsHit = false, IsShip = false });
-            board.Add(new BoardFiled() { Row = 5, Column = 5, IsHit = true, IsShip = true});
+            _battleships = new Battleships();
+            Logger.TextArea = consoleLog;
         }
 
-        List<BoardFiled> board = new List<BoardFiled>();
         
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
         }
 
-        private void tableLayoutPanel1_CellPaint(object sender, TableLayoutCellPaintEventArgs e)
+        private void playerBoard_CellPaint(object sender, TableLayoutCellPaintEventArgs e)
         {
             e.Graphics.FillRectangle(Brushes.LightBlue, e.CellBounds);
 
-            var filed = board.FirstOrDefault(x => x.Row == e.Row && x.Column == e.Column);
+            var filed = _battleships.PlayerBoard.GetField(e.Row,e.Column);
             if(filed != null)
             {
                 if (filed.IsShip)
@@ -42,28 +41,48 @@ namespace GBattleships
                     rectangle.Inflate(-1, -1);
                     ControlPaint.DrawBorder3D(e.Graphics, rectangle, Border3DStyle.Raised, Border3DSide.All); // 3D border
                 }
+                else
+                {
+                    var rectangle = e.CellBounds;
+                    //rectangle.Inflate(-1, -1);
+                    ControlPaint.DrawBorder(e.Graphics, rectangle, Color.Black, ButtonBorderStyle.Inset);}
+
                 if (filed.IsHit)
                 {
                     e.Graphics.FillRectangle(Brushes.Red, e.CellBounds);
-
                 }
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void startButton_Click(object sender, EventArgs e)
         {
-            board.Add(new BoardFiled() { Row = 6, Column = 6, IsHit = true, IsShip = true });
+            startButton.Enabled = false;
 
-            tableLayoutPanel1.Refresh();
+            
 
+            _battleships.Start();
+            Logger.Info("GameStarted");
+
+            playerBoard.Refresh();
+
+            while (!_battleships.IsGmaeOver())
+            {
+                while(!_battleships.PlayerTurn())
+                {
+                    
+                }
+
+                if(!_battleships.IsGmaeOver())
+                {
+                    _battleships.ComputerTurn();
+                }
+            }
+
+            //board.Add(new BoardFiled() { Row = 6, Column = 6, IsHit = true, IsShip = true });
+
+            playerBoard.Refresh();
+
+            startButton.Enabled = true;
         }
-    }
-
-    internal class BoardFiled
-    {
-        public int Row { get; set; }
-        public int Column { get; set; }
-        public bool IsShip { get; set; }
-        public bool IsHit { get; set; }
     }
 }

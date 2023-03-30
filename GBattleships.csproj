@@ -52,6 +52,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Game\Battleships.cs" />
+    <Compile Include="Game\Board.cs" />
+    <Compile Include="Game\BoardFactory.cs" />
+    <Compile Include="Game\BoardField.cs" />
+    <Compile Include="Game\ShipFactory.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
