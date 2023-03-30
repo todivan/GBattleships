@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace GBattleships.Game
 {
@@ -25,8 +26,8 @@ namespace GBattleships.Game
         public void Start()
         {
             BoardFactory boardFactory = new BoardFactory();
-
             PlayerBoard = boardFactory.GetBoard(isPlayer: true);
+            System.Threading.Thread.Sleep(1000);
             ComputerBoard = boardFactory.GetBoard(isPlayer: false);
         }
 
@@ -34,9 +35,9 @@ namespace GBattleships.Game
         /// All player move activities
         /// </summary>
         /// <returns></returns>
-        public bool PlayerTurn()
+        public void PlayerTurn(FireCommand fireCommand)
         {
-            return false;
+            ComputerBoard.HitField(fireCommand.X, fireCommand.Y);
         }
 
         /// <summary>
@@ -44,14 +45,29 @@ namespace GBattleships.Game
         /// </summary>
         public void ComputerTurn() 
         {
+            List<BoardField> availableFields = new List<BoardField>();
+            foreach (var field in PlayerBoard.Fields)
+            {
+                if(!field.IsHit)
+                {
+                    availableFields.Add(field);
+                }
+            }
 
+            Random random = new Random();
+            var randomIndexOfFieldToPlay = random.Next(availableFields.Count);
+
+            var fieldToPlay = availableFields[randomIndexOfFieldToPlay];
+            fieldToPlay.IsHit = true;
         }
 
         /// <summary>
         /// Check is game over
         /// </summary>
         /// <returns></returns>
-        public bool IsGmaeOver()
-        { return false; }
+        public bool IsGameOver()
+        {
+            return PlayerBoard.IsAllHit() || ComputerBoard.IsAllHit(); 
+        }
     }
 }

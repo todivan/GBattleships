@@ -13,7 +13,7 @@ namespace GBattleships
 
         public static void Info(string logLine)
         {
-            TextArea.Text.Concat(logLine + Environment.NewLine);
+            TextArea.Text = TextArea.Text + $"{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}: {logLine}{Environment.NewLine}";
             TextArea.Refresh();
         }
     }

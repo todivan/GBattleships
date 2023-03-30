@@ -41,5 +41,23 @@ namespace GBattleships.Game
                 Fields[shipField.Key, shipField.Value].IsShip = true;
             }
         }
+
+        public void HitField(int x, int y)
+        {
+            Fields[x, y].IsHit = true;
+        }
+
+        public bool IsAllHit()
+        {
+            foreach(var field in Fields)
+            {
+                if(!field.IsHit && field.IsShip)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
