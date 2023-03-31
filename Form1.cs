@@ -24,6 +24,7 @@ namespace GBattleships
             Logger.TextArea = consoleLog;
             coordinatesBox.Enabled = false;
             buttonFire.Enabled = false;
+            this.AcceptButton = buttonFire;
         }
 
         
@@ -48,7 +49,6 @@ namespace GBattleships
                 else
                 {
                     var rectangle = e.CellBounds;
-                    //rectangle.Inflate(-1, -1);
                     ControlPaint.DrawBorder(e.Graphics, rectangle, Color.Black, ButtonBorderStyle.Inset);}
 
                 if (filed.IsHit && filed.IsShip)
@@ -74,6 +74,8 @@ namespace GBattleships
 
             playerBoard.Refresh();
             computerBoard.Refresh();
+
+            this.ActiveControl = coordinatesBox;
         }
 
         private void buttonFire_Click(object sender, EventArgs e)
@@ -89,16 +91,16 @@ namespace GBattleships
 
                 if (_battleships.IsGameOver())
                 {
-                    FinishGame("Player");
+                    FinishGame(isPlayerWinner: true);
                 }
                 else
                 {
-                    _battleships.ComputerTurn();
-                    Logger.Info("Computer turn");
+                    var commnad = _battleships.ComputerTurn();
+                    Logger.Info($"Computer turn {commnad.GetInput()}");
                     playerBoard.Refresh();
                     if (_battleships.IsGameOver())
                     {
-                        FinishGame("Computer");
+                        FinishGame(isPlayerWinner: false);
                     }
                 }
             }
@@ -109,14 +111,25 @@ namespace GBattleships
             }
 
             coordinatesBox.Text = "";
+            this.ActiveControl = coordinatesBox;
         }
 
-        private void FinishGame(string winner)
+        private void FinishGame(bool isPlayerWinner)
         {
+            string winner = isPlayerWinner ? "Player" : "Computer";
             Logger.Info($"Winer is {winner} !!!!");
             startButton.Enabled = true;
             coordinatesBox.Enabled = false;
             buttonFire.Enabled = false;
+
+            if (isPlayerWinner)
+            {
+                MessageBox.Show("Congratulation you are WINNER !!!");
+            }
+            else
+            {
+                MessageBox.Show("Unfortunately the computer was better this time.");
+            }
         }
 
         private void computerBoard_Paint(object sender, PaintEventArgs e)
@@ -128,20 +141,21 @@ namespace GBattleships
         {
             e.Graphics.FillRectangle(Brushes.LightBlue, e.CellBounds);
 
+            //This can enable visibility for ships on computer board
+            bool computerBoardVisibility = false;
+
             var filed = _battleships.ComputerBoard.GetField(e.Row, e.Column);
             if (filed != null)
             {
-                if (filed.IsShip)
+                var rectangle = e.CellBounds;
+                //rectangle.Inflate(-1, -1);
+                ControlPaint.DrawBorder(e.Graphics, rectangle, Color.Black, ButtonBorderStyle.Inset);
+
+                if (filed.IsShip && computerBoardVisibility)
                 {
-                    var rectangle = e.CellBounds;
+                    rectangle = e.CellBounds;
                     rectangle.Inflate(-1, -1);
                     ControlPaint.DrawBorder3D(e.Graphics, rectangle, Border3DStyle.Raised, Border3DSide.All); // 3D border
-                }
-                else
-                {
-                    var rectangle = e.CellBounds;
-                    //rectangle.Inflate(-1, -1);
-                    ControlPaint.DrawBorder(e.Graphics, rectangle, Color.Black, ButtonBorderStyle.Inset);
                 }
 
                 if (filed.IsHit && filed.IsShip)

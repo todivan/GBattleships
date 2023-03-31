@@ -8,11 +8,14 @@ using System.Windows.Forms;
 
 namespace GBattleships.Game
 {
+    /// <summary>
+    /// Factory to generate custom Ship size on random position and orientation
+    /// </summary>
     internal class ShipFactory
     {
         private const int MAX_INDEX = 9;
 
-        public List<KeyValuePair<int, int>> GetShip(int size, Board board)
+        public List<KeyValuePair<int, int>> GetShip(int size, IBoard board)
         {
             var ship = new List<KeyValuePair<int, int>>();
 
@@ -24,7 +27,9 @@ namespace GBattleships.Game
                 // 1 = horizontal
                 // 2 = vertical
                 int orientation = random.Next(1, 3); // random direction
+                System.Threading.Thread.Sleep(10);
                 int x = random.Next(0, 10 - (orientation == 1 ? size : 0)); // random start X
+                System.Threading.Thread.Sleep(10);
                 int y = random.Next(0, 10 - (orientation == 1 ? 0 : size)); // random start y
                 
                 for(int i=0; i<size; i++)

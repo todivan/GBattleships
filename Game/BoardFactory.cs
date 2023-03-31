@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace GBattleships.Game
 {
+    /// <summary>
+    /// Factory for generating board with random ships location
+    /// </summary>
     internal class BoardFactory
     {
         public Board GetBoard(bool isPlayer)
@@ -13,7 +16,7 @@ namespace GBattleships.Game
             Board board = new Board();
             board.IsPlayer = isPlayer;
 
-            Shuffle(board);
+            Shuffle(ref board);
 
             return board; 
         }
@@ -21,7 +24,7 @@ namespace GBattleships.Game
         /// <summary>
         /// Generate board with random located ships
         /// </summary>
-        private void Shuffle(Board board)
+        private void Shuffle(ref Board board)
         {
             ShipFactory shipFactory = new ShipFactory();
 

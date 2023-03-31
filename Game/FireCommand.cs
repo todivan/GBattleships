@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace GBattleships.Game
 {
+    /// <summary>
+    /// Class to carry command and transform from input string to coordinates and vise versa
+    /// </summary>
     internal class FireCommand
     {
         public int X { get; set; }
@@ -27,15 +31,15 @@ namespace GBattleships.Game
 
         private Dictionary<char, int> _xValues = new Dictionary<char, int>()
         {
-            { '1', 0 },
-            { '2', 1 },
-            { '3', 2 },
-            { '4', 3 },
-            { '5', 4 },
-            { '6', 5 },
-            { '7', 6 },
-            { '8', 7 },
-            { '9', 8 }
+            { '1', 9 },
+            { '2', 8 },
+            { '3', 7 },
+            { '4', 6 },
+            { '5', 5 },
+            { '6', 4 },
+            { '7', 3 },
+            { '8', 2 },
+            { '9', 1 }
         };
 
         //private const List<Char> XValues = new List<char>() { '1', '2', '3' };
@@ -85,7 +89,7 @@ namespace GBattleships.Game
             {
                 if (input[1] == '1' && input[2] == 0)
                 {
-                    X = 9;
+                    X = 0;
                 }
                 else
                 {
@@ -94,5 +98,19 @@ namespace GBattleships.Game
             }
         }
 
+        public FireCommand(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
+
+        public string GetInput()
+        {
+            var inputX = _xValues.FirstOrDefault(x => x.Value == X).Key;
+            var inputY = _yValues.FirstOrDefault(x => x.Value == Y).Key;
+            
+            return inputY.ToString() + (inputX == '\0' ? "10" : inputX.ToString());
+        }
     }
 }

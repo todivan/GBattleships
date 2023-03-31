@@ -54,6 +54,7 @@ Thumbs.db
 /*.user
 /bin
 /obj
+/packages
 
 
 

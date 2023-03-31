@@ -57,6 +57,7 @@
     <Compile Include="Game\BoardFactory.cs" />
     <Compile Include="Game\BoardField.cs" />
     <Compile Include="Game\FireCommand.cs" />
+    <Compile Include="Game\IBoard.cs" />
     <Compile Include="Game\ShipFactory.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Program.cs" />

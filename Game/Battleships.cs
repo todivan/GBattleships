@@ -7,6 +7,9 @@ using System.Windows.Forms;
 
 namespace GBattleships.Game
 {
+    /// <summary>
+    /// Class hold domain logic of the game
+    /// </summary>
     internal class Battleships
     {
         public Board PlayerBoard { get; private set; }
@@ -27,7 +30,7 @@ namespace GBattleships.Game
         {
             BoardFactory boardFactory = new BoardFactory();
             PlayerBoard = boardFactory.GetBoard(isPlayer: true);
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(100);
             ComputerBoard = boardFactory.GetBoard(isPlayer: false);
         }
 
@@ -43,7 +46,7 @@ namespace GBattleships.Game
         /// <summary>
         /// All computer move activities
         /// </summary>
-        public void ComputerTurn() 
+        public FireCommand ComputerTurn() 
         {
             List<BoardField> availableFields = new List<BoardField>();
             foreach (var field in PlayerBoard.Fields)
@@ -59,6 +62,9 @@ namespace GBattleships.Game
 
             var fieldToPlay = availableFields[randomIndexOfFieldToPlay];
             fieldToPlay.IsHit = true;
+
+            FireCommand fireCommand = new FireCommand(fieldToPlay.Column, fieldToPlay.Row);
+            return fireCommand;
         }
 
         /// <summary>
