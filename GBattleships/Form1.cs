@@ -64,54 +64,72 @@ namespace GBattleships
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            startButton.Enabled = false;
+            try
+            { 
+                startButton.Enabled = false;
 
-            _battleships.Start();
-            Logger.Info("GameStarted");
+                _battleships.Start();
+                Logger.Info("GameStarted");
 
-            coordinatesBox.Enabled = true;
-            buttonFire.Enabled = true;
+                coordinatesBox.Enabled = true;
+                buttonFire.Enabled = true;
 
-            playerBoard.Refresh();
-            computerBoard.Refresh();
+                playerBoard.Refresh();
+                computerBoard.Refresh();
 
-            this.ActiveControl = coordinatesBox;
+                this.ActiveControl = coordinatesBox;
+            }
+            catch(Exception ex) 
+            {
+                Logger.Info(ex.Message);
+                Logger.Info(ex.StackTrace);
+                MessageBox.Show("Starting goes wrong, please check logs");
+            }
         }
 
         private void buttonFire_Click(object sender, EventArgs e)
         {
-            FireCommand fireCommand = new FireCommand(coordinatesBox.Text);
-
-            if (fireCommand.IsValid)
+            try
             {
+                FireCommand fireCommand = new FireCommand(coordinatesBox.Text);
 
-                _battleships.PlayerTurn(fireCommand);
-                Logger.Info($"Payer turn {coordinatesBox.Text}");
-                computerBoard.Refresh();
-
-                if (_battleships.IsGameOver())
+                if (fireCommand.IsValid)
                 {
-                    FinishGame(isPlayerWinner: true);
+
+                    _battleships.PlayerTurn(fireCommand);
+                    Logger.Info($"Payer turn {coordinatesBox.Text}");
+                    computerBoard.Refresh();
+
+                    if (_battleships.IsGameOver())
+                    {
+                        FinishGame(isPlayerWinner: true);
+                    }
+                    else
+                    {
+                        var commnad = _battleships.ComputerTurn();
+                        Logger.Info($"Computer turn {commnad.GetInput()}");
+                        playerBoard.Refresh();
+                        if (_battleships.IsGameOver())
+                        {
+                            FinishGame(isPlayerWinner: false);
+                        }
+                    }
                 }
                 else
                 {
-                    var commnad = _battleships.ComputerTurn();
-                    Logger.Info($"Computer turn {commnad.GetInput()}");
-                    playerBoard.Refresh();
-                    if (_battleships.IsGameOver())
-                    {
-                        FinishGame(isPlayerWinner: false);
-                    }
+                    MessageBox.Show("Coordinates are invalid");
+                    return;
                 }
-            }
-            else
-            {
-                MessageBox.Show("Coordinates are invalid");
-                return;
-            }
 
-            coordinatesBox.Text = "";
-            this.ActiveControl = coordinatesBox;
+                coordinatesBox.Text = "";
+                this.ActiveControl = coordinatesBox;
+            }
+            catch (Exception ex)
+            {
+                Logger.Info(ex.Message);
+                Logger.Info(ex.StackTrace);
+                MessageBox.Show("Playing goes wrong, please check logs");
+            }
         }
 
         private void FinishGame(bool isPlayerWinner)
