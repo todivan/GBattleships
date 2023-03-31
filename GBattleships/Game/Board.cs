@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GBattleships.Game
 {
-    internal class Board : IBoard
+    public class Board : IBoard
     {
         public Board() 
         {

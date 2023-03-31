@@ -10,7 +10,7 @@ namespace GBattleships.Game
     /// <summary>
     /// Class hold domain logic of the game
     /// </summary>
-    internal class Battleships
+    public class Battleships
     {
         public Board PlayerBoard { get; private set; }
         public Board ComputerBoard { get; private set; }

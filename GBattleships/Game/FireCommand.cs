@@ -10,7 +10,7 @@ namespace GBattleships.Game
     /// <summary>
     /// Class to carry command and transform from input string to coordinates and vise versa
     /// </summary>
-    internal class FireCommand
+    public class FireCommand
     {
         public int X { get; set; }
         public int Y { get; set; }

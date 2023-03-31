@@ -51,13 +51,10 @@ Thumbs.db
 
 *.suo
 .vs/
-/.vs
 /*.user
-GBattleships/bin
-GBattleships/obj
+/bin
+/obj
 /packages
-UnitTests/bin
-UnitTests/obj
 
 
 

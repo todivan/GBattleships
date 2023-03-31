@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GBattleships.Game
 {
-    internal class BoardField
+    public class BoardField
     {
         public int Row { get; set; }
         public int Column { get; set; }
